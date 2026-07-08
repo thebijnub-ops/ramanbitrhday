@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, Raman 🕉️</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0509;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      color: #e8d9c5;
+    }
+
+    #bg {
+      position: fixed;
+      inset: -7%;
+      background: url('background.jpg') center / cover no-repeat;
+      will-change: transform;
+      z-index: 0;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(155deg, rgba(18,7,4,0.80) 0%, rgba(10,6,20,0.62) 50%, rgba(26,4,10,0.76) 100%);
+      z-index: 1;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .blob-a {
+      width: 520px; height: 520px;
+      background: rgba(255,153,51,0.075);
+      top: -160px; right: -130px;
+      animation: blobPulse 10s ease-in-out infinite;
+    }
+    .blob-b {
+      width: 420px; height: 420px;
+      background: rgba(199,60,40,0.08);
+      bottom: -130px; left: -110px;
+      animation: blobPulse 10s ease-in-out infinite -5s;
+    }
+    .blob-c {
+      width: 280px; height: 280px;
+      background: rgba(255,215,0,0.05);
+      top: 45%; left: 35%;
+      animation: blobPulse 8s ease-in-out infinite -2s;
+    }
+    @keyframes blobPulse {
+      0%, 100% { transform: scale(1);   opacity: 1; }
+      50%       { transform: scale(1.1); opacity: 0.55; }
+    }
+
+    .sil-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    #canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ── Layout ─────────────────────────────────────────── */
+    .wrapper {
+      position: relative;
+      z-index: 3;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 28px;
+      gap: 48px;
+    }
+
+    /* ── Glass card ──────────────────────────────────────── */
+    .card {
+      flex: 1;
+      max-width: 520px;
+      background: rgba(20,8,10,0.50);
+      backdrop-filter: blur(28px) saturate(120%);
+      -webkit-backdrop-filter: blur(28px) saturate(120%);
+      border: 1px solid rgba(255,180,60,0.18);
+      border-top-color: rgba(255,215,0,0.30);
+      border-radius: 20px;
+      padding: 42px 40px;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 0 55px rgba(255,153,51,0.09),
+        0 24px 64px rgba(0,0,0,0.55);
+      opacity: 0;
+      animation: fadeUp 1.1s cubic-bezier(0.22,1,0.36,1) forwards 0.7s;
+    }
+
+    @media (min-width: 881px) {
+      .card { max-height: 80vh; overflow-y: auto; }
+      .card::-webkit-scrollbar { width: 3px; }
+      .card::-webkit-scrollbar-track { background: transparent; }
+      .card::-webkit-scrollbar-thumb { background: rgba(255,180,60,0.30); border-radius: 2px; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.6rem;
+      font-weight: normal;
+      color: #ffd166;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      text-shadow: 0 0 28px rgba(255,180,60,0.5);
+    }
+
+    .card-rule {
+      width: 64px;
+      height: 1.5px;
+      border: none;
+      background: linear-gradient(90deg, #ffb347, #c0392b 60%, transparent);
+      margin-bottom: 26px;
+    }
+
+    .card-body p {
+      font-size: 0.93rem;
+      line-height: 1.9;
+      color: #e8d9c5;
+      margin-bottom: 16px;
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    .card-body p:last-of-type { margin-bottom: 0; }
+
+    .p-outro {
+      color: #ffe4b8 !important;
+      font-style: italic;
+    }
+
+    .card-sign {
+      display: block;
+      margin-top: 22px;
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: #e0a868;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .p1 { animation: fadeUp 0.7s ease forwards 1.40s; }
+    .p2 { animation: fadeUp 0.7s ease forwards 1.72s; }
+    .p3 { animation: fadeUp 0.7s ease forwards 2.04s; }
+    .p4 { animation: fadeUp 0.7s ease forwards 2.36s; }
+    .p5 { animation: fadeUp 0.7s ease forwards 2.68s; }
+    .p6 { animation: fadeUp 0.7s ease forwards 3.00s; }
+    .sign { animation: fadeUp 0.7s ease forwards 3.30s; }
+
+    /* ── Character column ───────────────────────────────── */
+    .char-col {
+      flex-shrink: 0;
+      width: 320px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeIn 1.4s ease forwards 0.2s;
+    }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .char-float {
+      animation: floatImg 6.5s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .char-float img {
+      max-width: 100%;
+      max-height: 60vh;
+      object-fit: contain;
+      display: block;
+      filter:
+        drop-shadow(0 0 18px rgba(255,180,60,0.28))
+        drop-shadow(0 0 55px rgba(199,60,40,0.14))
+        drop-shadow(0 32px 45px rgba(0,0,0,0.65));
+    }
+
+    @keyframes floatImg {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-18px); }
+    }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 880px) {
+      .wrapper {
+        flex-direction: column;
+        padding: 32px 16px;
+        gap: 26px;
+        min-height: auto;
+      }
+      .char-col {
+        width: 100%;
+        max-width: 240px;
+        order: -1;
+      }
+      .char-float img { max-height: 34vh; }
+      .card {
+        max-width: 100%;
+        padding: 30px 22px;
+      }
+      .card-title { font-size: 1.35rem; }
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 24px 18px; }
+      .card-title { font-size: 1.2rem; }
+      .card-body p { font-size: 0.875rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="bg"></div>
+<div class="overlay"></div>
+<div class="blob blob-a"></div>
+<div class="blob blob-b"></div>
+<div class="blob blob-c"></div>
+<div class="sil-layer" id="silLayer"></div>
+<canvas id="canvas"></canvas>
+
+<div class="wrapper">
+  <div class="card">
+    <h1 class="card-title">Happy Birthday, Raman! 🕉️</h1>
+    <hr class="card-rule">
+    <div class="card-body">
+      <p class="p1">Wishing you good health, peace, and the strength to keep growing into the best version of yourself. May this new year of your life bring clarity in your decisions, meaningful friendships, and the courage to walk your own path with confidence.</p>
+      <p class="p2">One lesson often associated with Lord Shiva is that transformation is a part of life. Shiva is known as the destroyer — not of life, but of ignorance, ego, fear, and the things that keep us from growing. Real strength isn't about holding on to old beliefs just because they're familiar. It's about having the courage to question yourself, learn something new, and change when the truth calls for it.</p>
+      <p class="p3">As you grow older, I hope you become less sensitive to criticism, less controlled by fear or insecurity, and more open to understanding people and ideas before judging them. Never let an inferiority mindset, blind hatred, or opinions formed without knowledge define who you are. True courage comes from wisdom, not anger. A strong person seeks understanding before choosing what to believe.</p>
+      <p class="p4">Thank you for being my friend. We've had our differences and our own perspectives, but I genuinely appreciate having you in my life. I hope our friendship continues to grow with mutual respect, honesty, and understanding. I wish nothing but the best for your future, and I'll always be rooting for you to become a wiser, stronger, and kinder person than you were yesterday.</p>
+      <p class="p5">May Lord Shiva bless you with a calm mind, a fearless heart, and the wisdom to embrace change without losing yourself.</p>
+      <p class="p6 p-outro">Happy Birthday once again. Har Har Mahadev! 🪔🎂</p>
+    </div>
+    <span class="card-sign sign">— Siti</span>
+  </div>
+
+  <div class="char-col" id="charCol">
+    <div class="char-float">
+      <img src="raman.png" alt="">
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Canvas Particles ──────────────────────────────────────────────────────
+const cvs = document.getElementById('canvas');
+const ctx = cvs.getContext('2d');
+let W, H;
+
+const onResize = () => { W = cvs.width = innerWidth; H = cvs.height = innerHeight; };
+onResize();
+window.addEventListener('resize', onResize);
+
+const PAL = [
+  '#ff9933','#ffb347','#ffd700','#f4c430',
+  '#e25822','#c0392b','#ffffff','#f5deb3',
+  '#ff7f50','#daa520','#fff5e1'
+];
+
+let mxS = 0, myS = 0, mxT = 0, myT = 0;
+
+class Particle {
+  constructor(spread) {
+    this._born = !!spread;
+    this._reset();
+  }
+
+  _reset() {
+    this.bx  = Math.random() * W;
+    this.y   = this._born ? Math.random() * H : H + 20 + Math.random() * 100;
+    this._born = false;
+    this.sz  = Math.random() * 22 + 7;
+    this.vy  = Math.random() * 1.1 + 0.35;
+    this.rot = Math.random() * Math.PI * 2;
+    this.rv  = (Math.random() - 0.5) * 0.055;
+    this.swA = Math.random() * 36 + 12;
+    this.swF = Math.random() * 0.015 + 0.004;
+    this.swO = Math.random() * Math.PI * 2;
+    this.al  = Math.random() * 0.5 + 0.2;
+    this.col = PAL[Math.floor(Math.random() * PAL.length)];
+    this.kind = Math.floor(Math.random() * 7);
+    this.mi  = Math.random() * 0.22 + 0.06;
+    this.t   = Math.random() * 800;
+  }
+
+  tick() {
+    this.t++;
+    this.y  -= this.vy;
+    this.x   = this.bx + Math.sin(this.t * this.swF + this.swO) * this.swA + mxS * this.mi;
+    this.rot += this.rv;
+    if (this.y < -80) this._reset();
+  }
+
+  draw() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.globalAlpha = this.al;
+    ctx.fillStyle   = this.col;
+    ctx.strokeStyle = this.col;
+    ctx.lineWidth   = 1.5;
+    switch (this.kind) {
+      case 0: this._star();     break;
+      case 1: this._om();       break;
+      case 2: this._sparkle();  break;
+      case 3: this._confetti(); break;
+      case 4: this._diya();     break;
+      case 5: this._diamond();  break;
+      case 6: this._ring();     break;
+    }
+    ctx.restore();
+  }
+
+  _star() {
+    const r1 = this.sz / 2, r2 = r1 * 0.42;
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const a = (i * Math.PI) / 5 - Math.PI / 2, r = i % 2 ? r2 : r1;
+      i ? ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r)
+        : ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+    }
+    ctx.closePath(); ctx.fill();
+  }
+
+  _om() {
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `${this.sz}px 'Noto Sans Devanagari', serif`;
+    ctx.fillText('ॐ', 0, 0);
+  }
+
+  _sparkle() {
+    const s = this.sz / 2;
+    for (let i = 0; i < 4; i++) {
+      const a = (i * Math.PI) / 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.cos(a) * s, Math.sin(a) * s);
+      ctx.stroke();
+    }
+    for (let i = 0; i < 4; i++) {
+      const a = (i * Math.PI) / 2 + Math.PI / 4;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.cos(a) * s * 0.55, Math.sin(a) * s * 0.55);
+      ctx.stroke();
+    }
+    ctx.beginPath();
+    ctx.arc(0, 0, s * 0.14, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  _confetti() {
+    ctx.fillRect(-this.sz * 0.16, -this.sz * 0.43, this.sz * 0.32, this.sz * 0.86);
+  }
+
+  _diya() {
+    const r = this.sz * 0.5;
+    ctx.beginPath();
+    ctx.ellipse(0, r * 0.3, r * 0.85, r * 0.35, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#ffcf40';
+    ctx.beginPath();
+    ctx.moveTo(0, -r * 0.15);
+    ctx.quadraticCurveTo(r * 0.35, -r * 0.55, 0, -r * 1.1);
+    ctx.quadraticCurveTo(-r * 0.35, -r * 0.55, 0, -r * 0.15);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  _diamond() {
+    const s = this.sz * 0.48;
+    ctx.beginPath();
+    ctx.moveTo(0, -s);
+    ctx.lineTo(s * 0.54, 0);
+    ctx.lineTo(0, s);
+    ctx.lineTo(-s * 0.54, 0);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  _ring() {
+    const r = this.sz * 0.38;
+    ctx.beginPath(); ctx.arc(0, 0, r,          0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.55, 0, Math.PI * 2); ctx.stroke();
+  }
+}
+
+const pool = Array.from({ length: 62 }, () => new Particle(true));
+
+(function loop() {
+  mxS += (mxT - mxS) * 0.06;
+  myS += (myT - myS) * 0.06;
+  ctx.clearRect(0, 0, W, H);
+  pool.forEach(p => { p.tick(); p.draw(); });
+  requestAnimationFrame(loop);
+})();
+
+// ── Parallax ──────────────────────────────────────────────────────────────
+const bgEl    = document.getElementById('bg');
+const charCol = document.getElementById('charCol');
+
+function applyParallax(nx, ny) {
+  const cx = nx - 0.5, cy = ny - 0.5;
+  mxT = cx * 24;
+  myT = cy * 24;
+  bgEl.style.transform    = `translate(${cx * 22}px, ${cy * 15}px) scale(1.08)`;
+  charCol.style.transform = `translate(${cx * -13}px, ${cy * -9}px)`;
+}
+
+document.addEventListener('mousemove', e =>
+  applyParallax(e.clientX / innerWidth, e.clientY / innerHeight)
+);
+document.addEventListener('touchmove', e => {
+  if (e.touches[0])
+    applyParallax(e.touches[0].clientX / innerWidth, e.touches[0].clientY / innerHeight);
+}, { passive: true });
+
+// ── Background Silhouettes (paisley / mandala motifs) ───────────────────────
+const silLayer = document.getElementById('silLayer');
+
+const silDefs = [
+  [`<svg width="88" height="88" viewBox="0 0 50 50"><polygon points="25,5 30,20 45,20 33,30 38,45 25,35 12,45 17,30 5,20 20,20" fill="rgba(255,180,60,0.06)"/></svg>`,  '7%', '11%'],
+  [`<svg width="52" height="52" viewBox="0 0 50 50"><polygon points="25,5 30,20 45,20 33,30 38,45 25,35 12,45 17,30 5,20 20,20" fill="rgba(255,180,60,0.045)"/></svg>`,   '83%','7%' ],
+  [`<svg width="38" height="38" viewBox="0 0 50 50"><polygon points="25,5 30,20 45,20 33,30 38,45 25,35 12,45 17,30 5,20 20,20" fill="rgba(255,215,0,0.045)"/></svg>`, '50%','3%' ],
+  [`<svg width="96" height="96" viewBox="0 0 50 50"><path d="M25 4A21 21 0 1 1 25 46A16 16 0 1 0 25 4Z" fill="rgba(199,60,40,0.06)"/></svg>`,                          '4%', '57%'],
+  [`<svg width="68" height="68" viewBox="0 0 50 50"><path d="M25 4A21 21 0 1 1 25 46A16 16 0 1 0 25 4Z" fill="rgba(199,60,40,0.055)"/></svg>`,                        '88%','67%'],
+  [`<svg width="50" height="50" viewBox="0 0 50 50"><path d="M25 4A21 21 0 1 1 25 46A16 16 0 1 0 25 4Z" fill="rgba(244,196,48,0.045)"/></svg>`,                        '91%','38%'],
+  [`<svg width="84" height="84" viewBox="0 0 60 60"><polygon points="30,5 52,17.5 52,42.5 30,55 8,42.5 8,17.5" fill="none" stroke="rgba(255,215,0,0.07)" stroke-width="2"/></svg>`, '13%','77%'],
+  [`<svg width="58" height="58" viewBox="0 0 60 60"><polygon points="30,5 52,17.5 52,42.5 30,55 8,42.5 8,17.5" fill="none" stroke="rgba(255,215,0,0.06)" stroke-width="2"/></svg>`, '74%','31%'],
+  [`<svg width="72" height="72" viewBox="0 0 60 60"><polygon points="30,5 52,17.5 52,42.5 30,55 8,42.5 8,17.5" fill="none" stroke="rgba(255,153,51,0.05)" stroke-width="2"/></svg>`,    '2%', '32%'],
+];
+
+silDefs.forEach(([html, left, top]) => {
+  const div = Object.assign(document.createElement('div'), { innerHTML: html });
+  div.style.cssText = `position:absolute;left:${left};top:${top};pointer-events:none;`;
+  silLayer.appendChild(div);
+});
+</script>
+</body>
+</html>
